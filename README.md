@@ -19,6 +19,7 @@ Exemplo da idéia: https://www.youtube.com/watch?v=yHlzje7TDlM
 
 ### Regras
 
+- O jogo deve ser desenvolvido usando a Unity com a linguagem C# - pode-se criar arquivos de configurações externas se caso desejar;
 - A bola deve subir e descer aleatoriamente para um dos dois lados: caso caia mais para o lado direito o jogador deve clicar na direita. Caso seja mais para a esquerda, o jogador deverá clicar mais para a esquerda;
 - Caso o jogador clique muito antes ou depois, ele "perde" o tempo da bola, ela deve cair no chão e depois disso aparece uma tela de Fim de Jogo, com duas opções: Reiniciar ou Voltar ao Menu;
 - A altura em que a bola deve estar para o toque funcionar não deverá ser muito ampla;
