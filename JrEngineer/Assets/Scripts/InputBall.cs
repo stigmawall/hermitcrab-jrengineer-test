@@ -2,43 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputBall :MonoBehaviour
+public enum Dir {
+    Left,
+    Right,
+}
+public class InputBall : MouseFeedback
 {
     public float Impulse;
     private Rigidbody _rb;
+    private Dir _direction;
+    public Transform BallPos;
 
     public delegate void CollisionAction();
     public static event CollisionAction OnCollisionGround;
 
     public delegate void ClickAction();
     public static event ClickAction OnKickBall;
+    public static InputBall Instance;
 
-    private int randomForce;
+    private float _randomForce;
+    public float MaxForce;
+    public float MinForce;
+    private float _randomDir;
 
+    void Awake() {
+        Instance = this;
+    }
     // Use this for initialization
     void Start () {
-        _rb=GetComponent<Rigidbody>();
+        _rb=GetComponent<Rigidbody>();     
 	}
+
+    public void RestartBallPosition() {
+        transform.position=BallPos.transform.position;
+    }
 	
     void OnMouseDown() {
-        if (!ManagerScript.GameIsOver) {
+        if (!ManagerScript.GameIsOver && ManagerScript.CanKick) {
             if (!ManagerScript.HasStart)
             {
                 ManagerScript.HasStart = true;
             }
-            _rb.AddForce(transform.up * Impulse);
+            AddRandomForce();
+           // _rb.AddForce(transform.up * Impulse);
             if (OnKickBall != null)
                 OnKickBall();
         }       
     }
 
-    void OnMouseEnter() {
-    }
+    void AddRandomForce() {
+        _randomForce = Random.Range(MinForce, MaxForce);
+        _randomDir = Random.Range(0, 2);
 
+      _direction= _randomDir!=0 ? Dir.Left : Dir.Right;
+
+        if (_direction == Dir.Left) {
+            _rb.AddForce(new Vector3(-_randomForce, 1, 0) * Impulse, ForceMode.Impulse);
+        }
+        if (_direction == Dir.Right)
+        {
+            _rb.AddForce(new Vector3(_randomForce, 1, 0) * Impulse, ForceMode.Impulse);
+        }
+
+    }
+    
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Ground")) {
             if (ManagerScript.HasStart) {
-
                 Debug.Log("GameOver");
                 if (OnCollisionGround != null)
                     OnCollisionGround();
