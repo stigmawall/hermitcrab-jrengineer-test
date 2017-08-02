@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
@@ -11,6 +12,8 @@ public class ManagerScript : MonoBehaviour {
     private int _score;
     public Text ScoreTxt;
     public Animator GameOverAnim;
+
+    public string MainMenuName;
 
     public AudioClip gameOverClip;
     public AudioSource source;
@@ -53,6 +56,10 @@ public class ManagerScript : MonoBehaviour {
     public void RestartGame() {
         GameOverAnim.SetTrigger("Restart");
         InitialSet();
+    }
+
+    public void ManiMenu() {
+        SceneManager.LoadScene(MainMenuName, LoadSceneMode.Single);
     }
     void IncrementScore() {
         _score += 1;
