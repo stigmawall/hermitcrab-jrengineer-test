@@ -6,12 +6,18 @@ public enum Dir {
     Left,
     Right,
 }
-public class InputBall : MouseFeedback
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(Rigidbody))]
+public class InputBall : MonoBehaviour
 {
     public float Impulse;
+    public float ForceUp;
     private Rigidbody _rb;
     private Dir _direction;
     public Transform BallPos;
+
+    public AudioClip kickClip;
+    public AudioSource _source;
 
     public delegate void CollisionAction();
     public static event CollisionAction OnCollisionGround;
@@ -23,57 +29,51 @@ public class InputBall : MouseFeedback
     private float _randomForce;
     public float MaxForce;
     public float MinForce;
-    private float _randomDir;
+    private int _randomDir;
 
     void Awake() {
         Instance = this;
+        _source = GetComponent<AudioSource>();
     }
     // Use this for initialization
     void Start () {
         _rb=GetComponent<Rigidbody>();     
 	}
-
     public void RestartBallPosition() {
         transform.position=BallPos.transform.position;
-    }
-	
+    }	
     void OnMouseDown() {
         if (!ManagerScript.GameIsOver && ManagerScript.CanKick) {
-            if (!ManagerScript.HasStart)
-            {
+            if (!ManagerScript.HasStart) {
                 ManagerScript.HasStart = true;
             }
             AddRandomForce();
-           // _rb.AddForce(transform.up * Impulse);
             if (OnKickBall != null)
                 OnKickBall();
-        }       
+        } else if (!ManagerScript.CanKick) {
+            OnCollisionGround();
+        }    
     }
-
     void AddRandomForce() {
         _randomForce = Random.Range(MinForce, MaxForce);
-        _randomDir = Random.Range(0, 2);
-
-      _direction= _randomDir!=0 ? Dir.Left : Dir.Right;
+        _randomDir = Random.Range(0, 2);      
+        _direction = _randomDir!=0 ? Dir.Left : Dir.Right;
 
         if (_direction == Dir.Left) {
-            _rb.AddForce(new Vector3(-_randomForce, 1, 0) * Impulse, ForceMode.Impulse);
+            _rb.AddForce(new Vector3(-_randomForce, 1, 0) * Impulse,ForceMode.Impulse);
         }
-        if (_direction == Dir.Right)
-        {
+        if (_direction == Dir.Right) {
             _rb.AddForce(new Vector3(_randomForce, 1, 0) * Impulse, ForceMode.Impulse);
         }
-
     }
     
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Ground")) {
             if (ManagerScript.HasStart) {
-                Debug.Log("GameOver");
                 if (OnCollisionGround != null)
                     OnCollisionGround();
-
             }
         }
     }
+
 }

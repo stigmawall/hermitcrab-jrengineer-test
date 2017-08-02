@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public class ManagerScript : MonoBehaviour {
     public static bool HasStart;
     public static bool GameIsOver;
@@ -10,25 +11,21 @@ public class ManagerScript : MonoBehaviour {
     private int _score;
     public Text ScoreTxt;
     public Animator GameOverAnim;
-    Vector3 Ball;
-    Vector3 Ground;
 
-    public GameObject ballPos;
-    public GameObject groundPos;
-
+    public AudioClip gameOverClip;
+    public AudioSource source;
+   
     public GameObject ActiveIcon;
     public GameObject InactiveIcon;
     private float _distance;
     public float RangeMin;
-    public float RangeMax;
-
-    void Awake() {
-        Ball = ballPos.transform.position;
-        Ground = new Vector3(0, groundPos.transform.position.y,0);
-    }
+    public float RangeMax;  
     // Use this for initialization
     void Start () {
         InitialSet();
+    }
+    void Awake() {
+        source = GetComponent<AudioSource>();
     }
     void InitialSet() {
         HasStart = false;
@@ -43,10 +40,12 @@ public class ManagerScript : MonoBehaviour {
         GameIsOver = true;
         HasStart = true;
         GameOverAnim.SetTrigger("GameOver");
+        if (_score > PlayerPrefs.GetInt("Score")) {
+            PlayerPrefs.SetInt("Score",_score);
+        }       
+        source.PlayOneShot(gameOverClip);
         DeactiveUIIcons();
     }
-
-
     void DeactiveUIIcons() {
         ActiveIcon.SetActive(false);
         InactiveIcon.SetActive(false);
@@ -59,41 +58,26 @@ public class ManagerScript : MonoBehaviour {
         _score += 1;
         ScoreTxt.text = _score.ToString();
     }
-    void OnEnable()
-    {
+    void OnEnable() {
         InputBall.OnCollisionGround += GameOver;
         InputBall.OnKickBall += IncrementScore;
     }
-    void OnDisable()
-    {
+    void OnDisable()  {
         InputBall.OnCollisionGround -= GameOver;
         InputBall.OnKickBall -= IncrementScore;
     }
 
-    void Update() {
-        FloorMeasure();
+    void Update() {       
         if (HasStart) {
-           if (_distance >= RangeMin && _distance <= RangeMax)
-            {
+           if (DistanceManager.Instance.isInRange)  {
                 ActiveIcon.SetActive(true);
                 InactiveIcon.SetActive(false);
                 CanKick = true;
-            }
-            else {
+            } else {
                 ActiveIcon.SetActive(false);
                 InactiveIcon.SetActive(true);
                 CanKick = false;
             }
         }        
-    }
-
-    void FloorMeasure()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(Ground, Ball, out hit))
-        {
-            _distance = hit.distance;
-            Debug.Log("Distance: " + _distance);
-        }
     }
 }
