@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
     public string SceneName;
+    public string TutorialScene;
     public Text ScoreLabel;
 	// Use this for initialization
 	void Start () {
@@ -16,15 +17,23 @@ public class MenuManager : MonoBehaviour {
         else {
             ScoreLabel.text = "No score saved";
         }
-        
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		
 	}
     public void LoadGame() {
-        SceneManager.LoadScene(SceneName, LoadSceneMode.Single);
+        if (PlayerPrefs.GetInt("Score") > 0)
+        {
+            SceneManager.LoadScene(SceneName, LoadSceneMode.Single);
+        }
+        else {
+            SceneManager.LoadScene(TutorialScene, LoadSceneMode.Single);
+        }
+    }
+
+    public void LoadTutorial() {
+        SceneManager.LoadScene(TutorialScene, LoadSceneMode.Single);
     }
 
     public void ExitGame() {

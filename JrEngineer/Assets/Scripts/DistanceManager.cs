@@ -21,5 +21,4 @@ public class DistanceManager : MonoBehaviour {
         }
         isInRange= _distance <= MaxDistance && _distance >=MinDistance ? true : false;
     }
-
 }

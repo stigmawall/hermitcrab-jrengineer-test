@@ -78,15 +78,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\MenuManager.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\DistanceManager.cs" />
     <Compile Include="Assets\Scripts\InputBall.cs" />
     <Compile Include="Assets\Scripts\ManagerScript.cs" />
-    <Compile Include="Assets\Scripts\MouseFeedback.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Outlined-Silhouette Only.shader" />
+    <Compile Include="Assets\Scripts\MenuManager.cs" />
+    <Compile Include="Assets\Scripts\RestartManager.cs" />
+    <Compile Include="Assets\Scripts\TutorialManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
