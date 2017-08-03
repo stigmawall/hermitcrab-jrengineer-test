@@ -75,7 +75,7 @@ public class ManagerScript : MonoBehaviour {
         InputBall.OnKickBall -= IncrementScore;
     }
 
-    Dir InputManager() {
+    void InputManager() {
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -84,19 +84,18 @@ public class ManagerScript : MonoBehaviour {
                 _mousePosClick = ray.direction;
                 if (_mousePosClick.x < 0)
                 {
-                    Direction = Dir.Right;
+                    Direction = Dir.Left;
                 }
                 else if (_mousePosClick.x > 0)
                 {
-                    Direction = Dir.Left;
+                    Direction = Dir.Right;
                 }
                 else {
                     Debug.Log("Center");
                 }
+                InputBall.Instance.AddForceBall();
             }
         }
-        return Direction;
-
     }
 
     void Update() {
