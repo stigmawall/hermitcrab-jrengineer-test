@@ -42,7 +42,7 @@ public class InputBall : MonoBehaviour
     public void RestartBallPosition() {
         transform.position=BallPos.transform.position;
     }	
-    void OnMouseDown() {
+   public void AddForceBall() {
         if (!ManagerScript.GameIsOver && ManagerScript.CanKick) {
             if (!ManagerScript.HasStart) {
                 ManagerScript.HasStart = true;

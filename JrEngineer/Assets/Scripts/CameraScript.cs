@@ -11,12 +11,13 @@ public class CameraScript : MonoBehaviour {
    
 	void Update () {
         transform.LookAt(Target);
+        /*
         _distanceBetweenBall = Vector3.Magnitude(Target.transform.position - transform.position);
 
         if (_distanceBetweenBall > FollowDistance)
         {
             transform.Translate(new Vector3(0,0,Velocity) *Time.deltaTime);
-        }
+        }*/
 
     }
 }

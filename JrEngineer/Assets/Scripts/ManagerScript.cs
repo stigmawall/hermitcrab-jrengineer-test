@@ -12,7 +12,8 @@ public class ManagerScript : MonoBehaviour {
     private int _score;
     public Text ScoreTxt;
     public Animator GameOverAnim;
-
+    private Vector3 _mousePosClick;
+    public Dir Direction;
     public string MainMenuName;
 
     public AudioClip gameOverClip;
@@ -74,7 +75,34 @@ public class ManagerScript : MonoBehaviour {
         InputBall.OnKickBall -= IncrementScore;
     }
 
-    void Update() {       
+    Dir InputManager() {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray))
+            {
+                _mousePosClick = ray.direction;
+                if (_mousePosClick.x < 0)
+                {
+                    Direction = Dir.Right;
+                }
+                else if (_mousePosClick.x > 0)
+                {
+                    Direction = Dir.Left;
+                }
+                else {
+                    Debug.Log("Center");
+                }
+            }
+        }
+        return Direction;
+
+    }
+
+    void Update() {
+
+       
+        InputManager();
         if (HasStart) {
            if (DistanceManager.Instance.isInRange)  {
                 ActiveIcon.SetActive(true);
